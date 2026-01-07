@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">NewTodoList</string>
+    <string name="bt_add">할 일 추가하기</string>
+    <string name="title">제목</string>
+    <string name="hint_title">해야할 일을 입력해주세요.</string>
+    <string name="category">분류</string>
+    <string name="hint_category">분류를 입력해주세요.</string>
+    <string name="point_color">포인트 컬러</string>
+    <string name="completion">완료</string>
 </resources>
