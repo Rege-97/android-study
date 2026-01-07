@@ -39,15 +39,15 @@ class TodoRecyclerViewAdapter(private val todoList: ArrayList<TodoEntity>) :
         val todoData = todoList[position]   // position 번째 TodoEntity 가져오기
         when (todoData.importance) {
             1 -> {
-                holder.tv_importance.setBackgroundColor(R.color.red)
+                holder.tv_importance.setBackgroundResource(R.color.red)
             }
 
             2 -> {
-                holder.tv_importance.setBackgroundColor(R.color.yellow)
+                holder.tv_importance.setBackgroundResource(R.color.yellow)
             }
 
             3 -> {
-                holder.tv_importance.setBackgroundColor(R.color.green)
+                holder.tv_importance.setBackgroundResource(R.color.green)
             }
         }
 
