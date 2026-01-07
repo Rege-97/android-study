@@ -58,6 +58,7 @@
         app:layout_constraintTop_toBottomOf="@id/edt_category" />
 
     <RadioGroup
+        android:id="@+id/radio_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
