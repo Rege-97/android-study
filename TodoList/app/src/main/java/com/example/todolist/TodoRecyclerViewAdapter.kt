@@ -8,7 +8,10 @@ import com.example.todolist.db.TodoEntity
 
 // RecyclerView 어댑터
 // 데이터 목록을 받아서 화면에 표시
-class TodoRecyclerViewAdapter(private val todoList: ArrayList<TodoEntity>) :
+class TodoRecyclerViewAdapter(
+    private val todoList: ArrayList<TodoEntity>,
+    private val listener: OnItemLongClickListener
+) :
     RecyclerView.Adapter<TodoRecyclerViewAdapter.MyViewHolder>() {  // RecyclerView.Adapter 상속( 제너릭 타입으로 ViewHolder 클래스 지정 )
 
     //ViewHolder 클래스
@@ -53,6 +56,11 @@ class TodoRecyclerViewAdapter(private val todoList: ArrayList<TodoEntity>) :
 
         holder.tv_importance.text = todoData.importance.toString()
         holder.tv_title.text = todoData.title
+
+        holder.root.setOnLongClickListener {
+            listener.onLongClick(position)
+            false
+        }
     }
 
     // RecyclerView에 보여줄 아이템 개수
