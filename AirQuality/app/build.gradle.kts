@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -18,6 +20,16 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val propsFile = rootProject.file("secrets.properties")
+        val props = Properties()
+
+        if (propsFile.exists()) {
+            propsFile.inputStream().use { props.load(it) }
+        }
+
+        val apiKey = props.getProperty("AIR_VISUAL_API_KEY") ?: ""
+        buildConfigField("String", "AIR_VISUAL_API_KEY", "\"$apiKey\"")
     }
 
     buildTypes {
@@ -37,9 +49,11 @@ android {
         jvmTarget = "11"
     }
 
-    viewBinding{
-        enable = true
+    buildFeatures {
+        viewBinding = true
+        buildConfig = true
     }
+
 }
 
 dependencies {

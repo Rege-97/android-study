@@ -8,7 +8,7 @@ class RetrofitConnection {
         private const val BASE_URL = "https://api.airvisual.com/v2/"
         private var INSTANCE: Retrofit? = null
 
-        fun getInstance(): Retrofit? {
+        fun getInstance(): Retrofit {
             if (INSTANCE == null) {
                 INSTANCE = Retrofit.Builder()
                     .baseUrl(BASE_URL)
@@ -16,7 +16,7 @@ class RetrofitConnection {
                     .build()
             }
 
-            return null
+            return INSTANCE!!
         }
     }
 }
