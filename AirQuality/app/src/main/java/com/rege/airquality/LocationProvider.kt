@@ -91,17 +91,15 @@ class LocationProvider(val context: Context) {
 
     /**
      * 위도 반환
-     * location이 null이면 0.0 반환
      */
-    fun getLocationLatitude(): Double {
-        return location?.latitude ?: 0.0
+    fun getLocationLatitude(): Double? {
+        return location?.latitude
     }
 
     /**
      * 경도 반환
-     * location이 null이면 0.0 반환
      */
-    fun getLocationLongitude(): Double {
-        return location?.longitude ?: 0.0
+    fun getLocationLongitude(): Double? {
+        return location?.longitude
     }
 }

@@ -5,6 +5,8 @@ import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
@@ -19,10 +21,14 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.rege.airquality.databinding.ActivityMainBinding
+import java.io.IOException
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
+
+    lateinit var locationProvider: LocationProvider
 
     // 권한 요청 시 구분용으로 사용하는 코드
     private val PERMISSIONS_REQUEST_CODE = 100
@@ -49,6 +55,47 @@ class MainActivity : AppCompatActivity() {
 
         // 앱 실행 시 권한 + GPS 상태 체크 시작
         checkAllPermissions()
+        updateUI()
+    }
+
+    private fun updateUI() {
+        locationProvider = LocationProvider(this@MainActivity)
+
+        val latitude: Double? = locationProvider.getLocationLatitude()
+        val longitude: Double? = locationProvider.getLocationLongitude()
+
+        if (latitude != null && longitude != null) {
+            val address = getCurrentAddress(latitude, longitude)
+
+            address?.let {
+                binding.tvLocationTitle.text = "${it.subLocality}"
+                binding.tvLocationSubtitle.text = "${it.countryName} ${it.adminArea}"
+            }
+        } else {
+            Toast.makeText(this@MainActivity, "위도, 경도 정보를 가져올 수 없습니다.", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun getCurrentAddress(latitude: Double, longitude: Double): Address? {
+        val geoCoder = Geocoder(this@MainActivity, Locale.KOREA)
+
+        val addresses: List<Address> = try {
+            geoCoder.getFromLocation(latitude, longitude, 7) ?: emptyList()
+
+        } catch (ioException: IOException) {
+            Toast.makeText(this@MainActivity, "지오코더 서비스를 이용불가 합니다.", Toast.LENGTH_LONG).show()
+            return null
+        } catch (illegalArgumentException: IllegalArgumentException) {
+            Toast.makeText(this@MainActivity, "잘못된 위도, 경도 입니다.", Toast.LENGTH_LONG).show()
+            return null
+        }
+
+        if (addresses.isEmpty()) {
+            Toast.makeText(this, "주소가 발견되지 않았습니다.", Toast.LENGTH_LONG).show()
+            return null
+        }
+
+        return addresses[0]
     }
 
     /**
@@ -123,7 +170,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             if (checkResult) {
-
+                updateUI()
             } else {
                 // 하나라도 거부되면 안내 후 앱 종료
                 Toast.makeText(this, "퍼미션이 거부되었습니다. 앱을 다시 실행하여 퍼미션을 허용해주세요.", Toast.LENGTH_LONG)
